@@ -3,27 +3,31 @@ package service
 import (
 	"fmt"
 	"github.com/gocolly/colly"
-	"log"
 	"scraping"
+	"scraping/pkg/logging"
 )
 
-type ScrapingService struct{}
+type ScrapingService struct {
+	logger *logging.Logger
+}
 
-func NewScrapingService() *ScrapingService {
-	return &ScrapingService{}
+func NewScrapingService(logger *logging.Logger) *ScrapingService {
+	return &ScrapingService{
+		logger: logger,
+	}
 }
 
 func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.Preview, error) {
+	logger := s.logger.Logger
+
 	c := colly.NewCollector()
 
-	//TODO добавить логирование
 	c.OnError(func(_ *colly.Response, err error) {
-		log.Println("Error: ", err.Error())
+		logger.Infof("Error: %s", err.Error())
 	})
 
-	//TODO добавить логирование
 	c.OnResponse(func(r *colly.Response) {
-		log.Println(fmt.Sprintf("Visiting: %s", r.Request.URL))
+		logger.Infof(fmt.Sprintf("Visiting: %s", r.Request.URL))
 	})
 
 	previews := make([]scraping.Preview, 0, 200)
@@ -41,16 +45,15 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 		previews = append(previews, preview)
 	})
 
-	//TODO добавить логирвоание
 	if category == "recipe" {
 		err := c.Visit("https://www.povarenok.ru/recipes/~" + page)
 		if err != nil {
-			log.Println(fmt.Sprintf("err: %s", err.Error()))
+			logger.Infof(fmt.Sprintf("err: %s", err.Error()))
 		}
 	} else {
 		err := c.Visit("https://www.povarenok.ru/recipes/category/" + category + "/~" + page)
 		if err != nil {
-			log.Println(fmt.Sprintf("err: %s", err.Error()))
+			logger.Infof(fmt.Sprintf("err: %s", err.Error()))
 		}
 	}
 
@@ -58,14 +61,16 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 }
 
 func (s *ScrapingService) GetRecipe(id string) (scraping.Recipe, error) {
+	logger := s.logger.Logger
+
 	c := colly.NewCollector()
 
 	c.OnError(func(_ *colly.Response, err error) {
-		log.Println("Error: ", err.Error())
+		logger.Infof("Error: %s", err.Error())
 	})
 
 	c.OnResponse(func(r *colly.Response) {
-		log.Println(fmt.Sprintf("Visiting: %s", r.Request.URL))
+		logger.Infof(fmt.Sprintf("Visiting: %s", r.Request.URL))
 	})
 
 	var recipe scraping.Recipe
@@ -100,7 +105,7 @@ func (s *ScrapingService) GetRecipe(id string) (scraping.Recipe, error) {
 
 	err := c.Visit("https://www.povarenok.ru/recipes/show/" + id)
 	if err != nil {
-		log.Printf("err : %s", err)
+		logger.Infof("err : %s", err)
 	}
 
 	return recipe, nil

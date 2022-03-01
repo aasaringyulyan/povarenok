@@ -1,6 +1,9 @@
 package service
 
-import "scraping"
+import (
+	"scraping"
+	"scraping/pkg/logging"
+)
 
 type Scraping interface {
 	GetPreview(category string, page string) ([]scraping.Preview, error)
@@ -11,8 +14,8 @@ type Service struct {
 	Scraping
 }
 
-func NewService() *Service {
+func NewService(logger *logging.Logger) *Service {
 	return &Service{
-		Scraping: NewScrapingService(),
+		Scraping: NewScrapingService(logger),
 	}
 }
