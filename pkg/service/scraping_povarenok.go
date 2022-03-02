@@ -45,7 +45,7 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 		previews = append(previews, preview)
 	})
 
-	if category == "recipe" {
+	if category == "1" {
 		err := c.Visit("https://www.povarenok.ru/recipes/~" + page)
 		if err != nil {
 			logger.Infof(fmt.Sprintf("err: %s", err.Error()))

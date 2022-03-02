@@ -13,7 +13,7 @@ const (
 )
 
 // this is meant to be constant! Please don't mutate it!
-var availableCategory = []string{"2", "6", "12", "15", "25", "30", "23"}
+var availableCategory = []string{"1", "2", "6", "12", "15", "25", "30", "23"}
 
 func getPage(ctx *gin.Context) (string, error) {
 	page := ctx.DefaultQuery(pageCtx, "1")
@@ -27,11 +27,7 @@ func getPage(ctx *gin.Context) (string, error) {
 }
 
 func getCategory(ctx *gin.Context) (string, error) {
-	category := ctx.DefaultQuery(categoryCtx, "recipe")
-	if category == "recipe" {
-		return category, nil
-	}
-
+	category := ctx.DefaultQuery(categoryCtx, "1")
 	for _, n := range availableCategory {
 		if category == n {
 			return category, nil

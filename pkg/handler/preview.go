@@ -5,6 +5,19 @@ import (
 	"net/http"
 )
 
+// @Summary Preview
+// @Tags Preview
+// @Description Get preview
+// @ID getPreview
+// @Accept  json
+// @Produce  json
+// @Param category query string true "category"
+// @Param page query string true "page"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /recipes [get]
 func (h *Handler) getPreview(ctx *gin.Context) {
 	logger := h.logger.Logger
 

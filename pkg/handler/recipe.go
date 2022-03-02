@@ -5,7 +5,19 @@ import (
 	"net/http"
 )
 
-func (h *Handler) GetRecipe(ctx *gin.Context) {
+// @Summary Recipe
+// @Tags recipe
+// @Description Get recipe
+// @ID getRecipe
+// @Accept  json
+// @Produce  json
+// @Param id query string true "id"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /recipe/show [get]
+func (h *Handler) getRecipe(ctx *gin.Context) {
 	logger := h.logger.Logger
 
 	logger.Info("Starting get recipe id")

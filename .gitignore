@@ -4,6 +4,9 @@
 *.so
 *.dylib
 
+.env
+.DS_Store
+
 .idea
 
 logs

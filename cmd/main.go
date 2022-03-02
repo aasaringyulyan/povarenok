@@ -10,6 +10,12 @@ import (
 	"syscall"
 )
 
+// @title Povarenok API
+// @version 1.0
+// @description API Server for scrapingApp
+
+// @host      195.2.80.162:80
+// @BasePath /
 func main() {
 	logger := logging.GetLogger()
 	services := service.NewService(logger)
@@ -17,7 +23,7 @@ func main() {
 
 	srv := new(scraping.Server)
 	go func() {
-		if err := srv.Run("1234", handlers.InitRoutes()); err != nil {
+		if err := srv.Run("8080", handlers.InitRoutes()); err != nil {
 			logger.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
