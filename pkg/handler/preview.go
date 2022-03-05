@@ -5,9 +5,15 @@ import (
 	"net/http"
 )
 
-// @Summary Preview
 // @Tags Preview
-// @Description Get preview
+// @Description category=1 - Свежие рецепты
+// @Description category=2 - Бульоны и супы
+// @Description category=6 - Горячие блюда
+// @Description category=12 - Салаты
+// @Description category=15 - Закуски
+// @Description category=25 - Выпечка
+// @Description category=30 - Десерты
+// @Description category=23 - Соусы
 // @ID getPreview
 // @Accept  json
 // @Produce  json

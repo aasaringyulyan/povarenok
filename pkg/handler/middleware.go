@@ -16,7 +16,7 @@ const (
 var availableCategory = []string{"1", "2", "6", "12", "15", "25", "30", "23"}
 
 func getPage(ctx *gin.Context) (string, error) {
-	page := ctx.DefaultQuery(pageCtx, "1")
+	page := ctx.Query(pageCtx)
 
 	_, ok := strconv.ParseUint(page, 10, 32)
 	if ok != nil {
@@ -27,7 +27,7 @@ func getPage(ctx *gin.Context) (string, error) {
 }
 
 func getCategory(ctx *gin.Context) (string, error) {
-	category := ctx.DefaultQuery(categoryCtx, "1")
+	category := ctx.Query(categoryCtx)
 	for _, n := range availableCategory {
 		if category == n {
 			return category, nil
@@ -38,10 +38,10 @@ func getCategory(ctx *gin.Context) (string, error) {
 }
 
 func getId(ctx *gin.Context) (string, error) {
-	id := ctx.DefaultQuery(idCtx, "err")
+	id := ctx.Query(idCtx)
 
-	_, ok := strconv.Atoi(id)
-	if ok != nil {
+	intId, ok := strconv.Atoi(id)
+	if ok != nil || intId < 0 {
 		return "", errors.New("id is of invalid type")
 	}
 

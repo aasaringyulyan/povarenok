@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   handler.errorResponse:
     properties:
@@ -8,15 +7,14 @@ definitions:
 host: 195.2.80.162:80
 info:
   contact: {}
-  description: API Server for scrapingApp
-  title: Povarenok API
+  description: API Server for povarenokApp
+  title: Povarenok :)
   version: "1.0"
 paths:
   /recipe/show:
     get:
       consumes:
       - application/json
-      description: Get recipe
       operationId: getRecipe
       parameters:
       - description: id
@@ -47,14 +45,21 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      summary: Recipe
       tags:
-      - recipe
+      - Recipe
   /recipes:
     get:
       consumes:
       - application/json
-      description: Get preview
+      description: |-
+        category=1 - Свежие рецепты
+        category=2 - Бульоны и супы
+        category=6 - Горячие блюда
+        category=12 - Салаты
+        category=15 - Закуски
+        category=25 - Выпечка
+        category=30 - Десерты
+        category=23 - Соусы
       operationId: getPreview
       parameters:
       - description: category
@@ -90,7 +95,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
-      summary: Preview
       tags:
       - Preview
 swagger: "2.0"

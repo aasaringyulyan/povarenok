@@ -5,9 +5,7 @@ import (
 	"net/http"
 )
 
-// @Summary Recipe
-// @Tags recipe
-// @Description Get recipe
+// @Tags Recipe
 // @ID getRecipe
 // @Accept  json
 // @Produce  json

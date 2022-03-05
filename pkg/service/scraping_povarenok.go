@@ -7,6 +7,12 @@ import (
 	"scraping/pkg/logging"
 )
 
+const (
+	visitShow     = "https://www.povarenok.ru/recipes/show/"
+	visitCategory = "https://www.povarenok.ru/recipes/category/"
+	visitRecipe   = "https://www.povarenok.ru/recipes/~"
+)
+
 type ScrapingService struct {
 	logger *logging.Logger
 }
@@ -22,17 +28,24 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 
 	c := colly.NewCollector()
 
+	var requestURL, url string
+
+	previews := make([]scraping.Preview, 0, 200)
+
 	c.OnError(func(_ *colly.Response, err error) {
 		logger.Infof("Error: %s", err.Error())
 	})
 
 	c.OnResponse(func(r *colly.Response) {
 		logger.Infof(fmt.Sprintf("Visiting: %s", r.Request.URL))
+		requestURL = r.Request.URL.String()
 	})
 
-	previews := make([]scraping.Preview, 0, 200)
-
 	c.OnHTML(".item-bl", func(e *colly.HTMLElement) {
+		if requestURL != url && page != "1" {
+			return
+		}
+
 		preview := scraping.Preview{
 			Id:      e.ChildAttr("div", "data-recipe"),
 			Link:    e.ChildAttr("h2 a", "href"),
@@ -46,12 +59,17 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 	})
 
 	if category == "1" {
-		err := c.Visit("https://www.povarenok.ru/recipes/~" + page)
+		url = visitRecipe + page + "/"
+
+		err := c.Visit(url)
 		if err != nil {
 			logger.Infof(fmt.Sprintf("err: %s", err.Error()))
 		}
+
 	} else {
-		err := c.Visit("https://www.povarenok.ru/recipes/category/" + category + "/~" + page)
+		url = visitCategory + category + "/~" + page + "/"
+
+		err := c.Visit(url)
 		if err != nil {
 			logger.Infof(fmt.Sprintf("err: %s", err.Error()))
 		}
@@ -103,7 +121,7 @@ func (s *ScrapingService) GetRecipe(id string) (scraping.Recipe, error) {
 		}
 	})
 
-	err := c.Visit("https://www.povarenok.ru/recipes/show/" + id)
+	err := c.Visit(visitShow + id)
 	if err != nil {
 		logger.Infof("err : %s", err)
 	}

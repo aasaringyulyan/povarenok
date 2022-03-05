@@ -10,12 +10,11 @@ import (
 	"syscall"
 )
 
-// @title Povarenok API
+// @title Povarenok :)
 // @version 1.0
-// @description API Server for scrapingApp
+// @description API Server for povarenokApp
 
-// @host      195.2.80.162:80
-// @BasePath /
+// @host     195.2.80.162:80
 func main() {
 	logger := logging.GetLogger()
 	services := service.NewService(logger)

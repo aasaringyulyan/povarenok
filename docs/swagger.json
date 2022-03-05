@@ -1,17 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API Server for scrapingApp",
-        "title": "Povarenok API",
+        "description": "API Server for povarenokApp",
+        "title": "Povarenok :)",
         "contact": {},
         "version": "1.0"
     },
     "host": "195.2.80.162:80",
-    "basePath": "/",
     "paths": {
         "/recipe/show": {
             "get": {
-                "description": "Get recipe",
                 "consumes": [
                     "application/json"
                 ],
@@ -19,9 +17,8 @@
                     "application/json"
                 ],
                 "tags": [
-                    "recipe"
+                    "Recipe"
                 ],
-                "summary": "Recipe",
                 "operationId": "getRecipe",
                 "parameters": [
                     {
@@ -68,7 +65,7 @@
         },
         "/recipes": {
             "get": {
-                "description": "Get preview",
+                "description": "category=1 - Свежие рецепты\ncategory=2 - Бульоны и супы\ncategory=6 - Горячие блюда\ncategory=12 - Салаты\ncategory=15 - Закуски\ncategory=25 - Выпечка\ncategory=30 - Десерты\ncategory=23 - Соусы",
                 "consumes": [
                     "application/json"
                 ],
@@ -78,7 +75,6 @@
                 "tags": [
                     "Preview"
                 ],
-                "summary": "Preview",
                 "operationId": "getPreview",
                 "parameters": [
                     {

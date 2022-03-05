@@ -18,7 +18,6 @@ const docTemplate = `{
     "paths": {
         "/recipe/show": {
             "get": {
-                "description": "Get recipe",
                 "consumes": [
                     "application/json"
                 ],
@@ -26,9 +25,8 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "recipe"
+                    "Recipe"
                 ],
-                "summary": "Recipe",
                 "operationId": "getRecipe",
                 "parameters": [
                     {
@@ -75,7 +73,7 @@ const docTemplate = `{
         },
         "/recipes": {
             "get": {
-                "description": "Get preview",
+                "description": "category=1 - Свежие рецепты\ncategory=2 - Бульоны и супы\ncategory=6 - Горячие блюда\ncategory=12 - Салаты\ncategory=15 - Закуски\ncategory=25 - Выпечка\ncategory=30 - Десерты\ncategory=23 - Соусы",
                 "consumes": [
                     "application/json"
                 ],
@@ -85,7 +83,6 @@ const docTemplate = `{
                 "tags": [
                     "Preview"
                 ],
-                "summary": "Preview",
                 "operationId": "getPreview",
                 "parameters": [
                     {
@@ -154,10 +151,10 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "195.2.80.162:80",
-	BasePath:         "/",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Povarenok API",
-	Description:      "API Server for scrapingApp",
+	Title:            "Povarenok :)",
+	Description:      "API Server for povarenokApp",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
