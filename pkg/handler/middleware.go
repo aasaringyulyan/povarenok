@@ -16,7 +16,7 @@ const (
 var availableCategory = []string{"1", "2", "6", "12", "15", "25", "30", "23"}
 
 func getPage(ctx *gin.Context) (string, error) {
-	page := ctx.Query(pageCtx)
+	page := ctx.DefaultQuery(pageCtx, "1")
 
 	_, ok := strconv.ParseUint(page, 10, 32)
 	if ok != nil {
@@ -27,7 +27,7 @@ func getPage(ctx *gin.Context) (string, error) {
 }
 
 func getCategory(ctx *gin.Context) (string, error) {
-	category := ctx.Query(categoryCtx)
+	category := ctx.DefaultQuery(categoryCtx, "1")
 	for _, n := range availableCategory {
 		if category == n {
 			return category, nil

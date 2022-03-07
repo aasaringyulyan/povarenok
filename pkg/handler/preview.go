@@ -6,23 +6,14 @@ import (
 )
 
 // @Tags Preview
-// @Description category=1 - Свежие рецепты
-// @Description category=2 - Бульоны и супы
-// @Description category=6 - Горячие блюда
-// @Description category=12 - Салаты
-// @Description category=15 - Закуски
-// @Description category=25 - Выпечка
-// @Description category=30 - Десерты
-// @Description category=23 - Соусы
 // @ID getPreview
 // @Accept  json
 // @Produce  json
-// @Param category query string true "category"
-// @Param page query string true "page"
+// @Param category query string false "category"
+// @Param page query string false "page"
+// @Success 200 {object} scraping.Preview "Preview"
 // @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 500,400,404 {object} errorResponse
 // @Router /recipes [get]
 func (h *Handler) getPreview(ctx *gin.Context) {
 	logger := h.logger.Logger

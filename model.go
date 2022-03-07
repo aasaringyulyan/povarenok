@@ -4,7 +4,6 @@ import "strings"
 
 type Preview struct {
 	Id      string `json:"id"`
-	Link    string `json:"link"`
 	Photo   string `json:"photo"`
 	Name    string `json:"name"`
 	Comment string `json:"comment"`
@@ -26,8 +25,13 @@ type Ingredients struct {
 }
 
 type Step struct {
-	Photo   string `json:"photo"`
-	Comment string `json:"comment"`
+	Photo   string   `json:"photo"`
+	Comment []string `json:"comment"`
+}
+
+type Category struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 func Replace(str string) string {

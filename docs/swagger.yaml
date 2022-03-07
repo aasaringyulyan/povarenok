@@ -4,6 +4,61 @@ definitions:
       message:
         type: string
     type: object
+  scraping.Category:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  scraping.Ingredients:
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+    type: object
+  scraping.Preview:
+    properties:
+      author:
+        type: string
+      comment:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+    type: object
+  scraping.Recipe:
+    properties:
+      comment:
+        type: string
+      id:
+        type: string
+      ingredients:
+        items:
+          $ref: '#/definitions/scraping.Ingredients'
+        type: array
+      name:
+        type: string
+      photo:
+        type: string
+      steps:
+        items:
+          $ref: '#/definitions/scraping.Step'
+        type: array
+    type: object
+  scraping.Step:
+    properties:
+      comment:
+        items:
+          type: string
+        type: array
+      photo:
+        type: string
+    type: object
 host: 195.2.80.162:80
 info:
   contact: {}
@@ -11,6 +66,32 @@ info:
   title: Povarenok :)
   version: "1.0"
 paths:
+  /recipe/categories:
+    get:
+      consumes:
+      - application/json
+      operationId: getCategories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      tags:
+      - Categories
   /recipe/show:
     get:
       consumes:
@@ -41,36 +122,21 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
       tags:
       - Recipe
   /recipes:
     get:
       consumes:
       - application/json
-      description: |-
-        category=1 - Свежие рецепты
-        category=2 - Бульоны и супы
-        category=6 - Горячие блюда
-        category=12 - Салаты
-        category=15 - Закуски
-        category=25 - Выпечка
-        category=30 - Десерты
-        category=23 - Соусы
       operationId: getPreview
       parameters:
       - description: category
         in: query
         name: category
-        required: true
         type: string
       - description: page
         in: query
         name: page
-        required: true
         type: string
       produces:
       - application/json
@@ -89,10 +155,6 @@ paths:
             $ref: '#/definitions/handler.errorResponse'
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        default:
-          description: ""
           schema:
             $ref: '#/definitions/handler.errorResponse'
       tags:

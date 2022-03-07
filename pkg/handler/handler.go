@@ -30,5 +30,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.GET("/recipes", h.getPreview)
 	router.GET("/recipe/show", h.getRecipe)
 
+	router.GET("/recipe/categories", h.getCategories)
+
 	return router
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/gocolly/colly"
 	"scraping"
 	"scraping/pkg/logging"
+	"strings"
 )
 
 const (
@@ -47,8 +48,8 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 		}
 
 		preview := scraping.Preview{
-			Id:      e.ChildAttr("div", "data-recipe"),
-			Link:    e.ChildAttr("h2 a", "href"),
+			Id: e.ChildAttr("div", "data-recipe"),
+			//Link:    e.ChildAttr("h2 a", "href"),
 			Photo:   e.ChildAttr("img", "src"),
 			Name:    e.ChildText("h2 a"),
 			Comment: scraping.Replace(e.ChildText("article.item-bl > p")),
@@ -105,9 +106,11 @@ func (s *ScrapingService) GetRecipe(id string) (scraping.Recipe, error) {
 		})
 
 		e.ForEach("div.cooking-bl", func(_ int, el *colly.HTMLElement) {
+			points := strings.Split(el.ChildText("div p"), "\n")
+
 			steps = append(steps, scraping.Step{
 				Photo:   el.ChildAttr("a", "href"),
-				Comment: scraping.Replace(el.ChildText("div p")),
+				Comment: points,
 			})
 		})
 

@@ -10,10 +10,11 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param id query string true "id"
+// @Success 200 {object} scraping.Recipe "Recipe"
+// @Success 200 {object} scraping.Ingredients "Ingredients"
+// @Success 200 {object} scraping.Step "Step"
 // @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 500,400,404 {object} errorResponse
 // @Router /recipe/show [get]
 func (h *Handler) getRecipe(ctx *gin.Context) {
 	logger := h.logger.Logger
