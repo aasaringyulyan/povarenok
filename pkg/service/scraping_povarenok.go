@@ -48,8 +48,7 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 		}
 
 		preview := scraping.Preview{
-			Id: e.ChildAttr("div", "data-recipe"),
-			//Link:    e.ChildAttr("h2 a", "href"),
+			Id:      e.ChildAttr("div", "data-recipe"),
 			Photo:   e.ChildAttr("img", "src"),
 			Name:    e.ChildText("h2 a"),
 			Comment: scraping.Replace(e.ChildText("article.item-bl > p")),
@@ -117,7 +116,7 @@ func (s *ScrapingService) GetRecipe(id string) (scraping.Recipe, error) {
 		recipe = scraping.Recipe{
 			Id:          id,
 			Name:        e.ChildText("div h1"),
-			Photo:       e.ChildAttr("img", "src"),
+			Photo:       e.ChildAttr("img[itemprop=image]", "src"),
 			Comment:     scraping.Replace(e.ChildText("div.article-text p")),
 			Ingredients: ingredients,
 			Steps:       steps,
