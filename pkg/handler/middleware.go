@@ -3,13 +3,15 @@ package handler
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/text/encoding/charmap"
 	"strconv"
 )
 
 const (
-	pageCtx     = "page"
-	categoryCtx = "category"
-	idCtx       = "id"
+	pageCtx        = "page"
+	categoryCtx    = "category"
+	idCtx          = "id"
+	searchInputCtx = "searchInput"
 )
 
 // this is meant to be constant! Please don't mutate it!
@@ -35,6 +37,18 @@ func getCategory(ctx *gin.Context) (string, error) {
 	}
 
 	return "", errors.New("category not found")
+}
+
+func getSearchInput(ctx *gin.Context) (string, error) {
+	searchInput := ctx.Query(searchInputCtx)
+
+	encoder := charmap.Windows1251.NewEncoder()
+	searchInput, err := encoder.String(searchInput)
+	if err != nil {
+		return "", errors.New("searchInput is of invalid type")
+	}
+
+	return searchInput, nil
 }
 
 func getId(ctx *gin.Context) (string, error) {

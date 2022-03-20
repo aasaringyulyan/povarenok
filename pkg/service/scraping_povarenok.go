@@ -1,17 +1,15 @@
 package service
 
 import (
-	"fmt"
-	"github.com/gocolly/colly"
 	"scraping"
 	"scraping/pkg/logging"
-	"strings"
 )
 
 const (
 	visitShow     = "https://www.povarenok.ru/recipes/show/"
 	visitCategory = "https://www.povarenok.ru/recipes/category/"
 	visitRecipe   = "https://www.povarenok.ru/recipes/~"
+	visitSearch   = "https://www.povarenok.ru/recipes/search/~"
 )
 
 type ScrapingService struct {
@@ -27,52 +25,28 @@ func NewScrapingService(logger *logging.Logger) *ScrapingService {
 func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.Preview, error) {
 	logger := s.logger.Logger
 
-	c := colly.NewCollector()
-
-	var requestURL, url string
-
-	previews := make([]scraping.Preview, 0, 200)
-
-	c.OnError(func(_ *colly.Response, err error) {
-		logger.Infof("Error: %s", err.Error())
-	})
-
-	c.OnResponse(func(r *colly.Response) {
-		logger.Infof(fmt.Sprintf("Visiting: %s", r.Request.URL))
-		requestURL = r.Request.URL.String()
-	})
-
-	c.OnHTML(".item-bl", func(e *colly.HTMLElement) {
-		if requestURL != url && page != "1" {
-			return
-		}
-
-		preview := scraping.Preview{
-			Id:      e.ChildAttr("div", "data-recipe"),
-			Photo:   e.ChildAttr("img", "src"),
-			Name:    e.ChildText("h2 a"),
-			Comment: scraping.Replace(e.ChildText("article.item-bl > p")),
-			Author:  scraping.Replace(e.ChildText("div.article-footer a.user-link")),
-		}
-
-		previews = append(previews, preview)
-	})
+	url := visitCategory + category + "/~" + page + "/"
 
 	if category == "1" {
 		url = visitRecipe + page + "/"
+	}
 
-		err := c.Visit(url)
-		if err != nil {
-			logger.Infof(fmt.Sprintf("err: %s", err.Error()))
-		}
+	previews, err := scrapingPreview(url, page, logger)
+	if err != nil {
+		return nil, err
+	}
 
-	} else {
-		url = visitCategory + category + "/~" + page + "/"
+	return previews, nil
+}
 
-		err := c.Visit(url)
-		if err != nil {
-			logger.Infof(fmt.Sprintf("err: %s", err.Error()))
-		}
+func (s *ScrapingService) GetSearchPreview(searchInput string, page string) ([]scraping.Preview, error) {
+	logger := s.logger.Logger
+
+	url := visitSearch + page + "/?name=" + searchInput
+
+	previews, err := scrapingPreview(url, page, logger)
+	if err != nil {
+		return nil, err
 	}
 
 	return previews, nil
@@ -81,51 +55,11 @@ func (s *ScrapingService) GetPreview(category string, page string) ([]scraping.P
 func (s *ScrapingService) GetRecipe(id string) (scraping.Recipe, error) {
 	logger := s.logger.Logger
 
-	c := colly.NewCollector()
+	url := visitShow + id
 
-	c.OnError(func(_ *colly.Response, err error) {
-		logger.Infof("Error: %s", err.Error())
-	})
-
-	c.OnResponse(func(r *colly.Response) {
-		logger.Infof(fmt.Sprintf("Visiting: %s", r.Request.URL))
-	})
-
-	var recipe scraping.Recipe
-
-	c.OnHTML(".item-bl", func(e *colly.HTMLElement) {
-		ingredients := make([]scraping.Ingredients, 0)
-		steps := make([]scraping.Step, 0)
-
-		e.ForEach("div.ingredients-bl ul li", func(_ int, el *colly.HTMLElement) {
-			ingredients = append(ingredients, scraping.Ingredients{
-				Name:  scraping.Replace(el.ChildText("a")),
-				Value: scraping.Replace(el.ChildText("span > span")),
-			})
-		})
-
-		e.ForEach("div.cooking-bl", func(_ int, el *colly.HTMLElement) {
-			points := strings.Split(el.ChildText("div p"), "\n")
-
-			steps = append(steps, scraping.Step{
-				Photo:   el.ChildAttr("a", "href"),
-				Comment: points,
-			})
-		})
-
-		recipe = scraping.Recipe{
-			Id:          id,
-			Name:        e.ChildText("div h1"),
-			Photo:       e.ChildAttr("img[itemprop=image]", "src"),
-			Comment:     scraping.Replace(e.ChildText("div.article-text p")),
-			Ingredients: ingredients,
-			Steps:       steps,
-		}
-	})
-
-	err := c.Visit(visitShow + id)
+	recipe, err := scrapingRecipe(url, id, logger)
 	if err != nil {
-		logger.Infof("err : %s", err)
+		return scraping.Recipe{}, err
 	}
 
 	return recipe, nil

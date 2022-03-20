@@ -28,8 +28,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/recipes", h.getPreview)
+	router.GET("/recipes/search", h.getSearchPreview)
 	router.GET("/recipe/show", h.getRecipe)
-
 	router.GET("/recipe/categories", h.getCategories)
 
 	return router
