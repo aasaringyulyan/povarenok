@@ -1,6 +1,6 @@
 ## API Server for povarenokApp
 
-![Header](https://github.com/aasaringyulyan/povorenok/blob/master/assets/gopher.png)
+<img align="right" width="159px" src="https://github.com/aasaringyulyan/povorenok/blob/master/assets/gopher.png>
 
 ### Tools:
 [![Go](https://img.shields.io/badge/-Go-090909?style=for-the-badge&logo=Go&logoColor=47C5FB)](https://go.dev/doc/)
@@ -13,6 +13,6 @@
 
 ---
 
-[API](http://195.2.80.162/swagger/index.html)
+## [API](http://195.2.80.162/swagger/index.html)
 
 ---
