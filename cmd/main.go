@@ -14,7 +14,7 @@ import (
 // @version 1.0
 // @description API Server for povarenokApp
 
-// @host    localhost:8080
+// @host  88.218.170.96:8080
 func main() {
 	logger := logging.GetLogger()
 	services := service.NewService(logger)
